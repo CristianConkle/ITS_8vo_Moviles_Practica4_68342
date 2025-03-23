@@ -1,13 +1,21 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import '../auth_service.dart';
 
 class ApiService {
   static final String _apiUrl = dotenv.get('API_URL');
 
   // Obtener todas las tareas
   static Future<List<Map<String, dynamic>>> getTasks() async {
-    final response = await http.get(Uri.parse('$_apiUrl/tareas'));
+    final response = await http.get(
+      Uri.parse('$_apiUrl/tareas'),
+      headers: {
+        'Content-Type': 'application/json',
+        if (AuthService.token != null)
+          'Authorization': 'Bearer ${AuthService.token}',
+      },
+    );
     if (response.statusCode == 200) {
       return List<Map<String, dynamic>>.from(json.decode(response.body));
     } else {
@@ -17,7 +25,14 @@ class ApiService {
 
   // Obtener una tarea por ID
   static Future<Map<String, dynamic>> getTaskById(int id) async {
-    final response = await http.get(Uri.parse('$_apiUrl/tareas/$id'));
+    final response = await http.get(
+      Uri.parse('$_apiUrl/tareas/$id'),
+      headers: {
+        'Content-Type': 'application/json',
+        if (AuthService.token != null)
+          'Authorization': 'Bearer ${AuthService.token}',
+      },
+    );
     if (response.statusCode == 200) {
       return Map<String, dynamic>.from(json.decode(response.body));
     } else {
@@ -26,10 +41,16 @@ class ApiService {
   }
 
   // Crear una nueva tarea
-  static Future<Map<String, dynamic>> createTask(Map<String, dynamic> task) async {
+  static Future<Map<String, dynamic>> createTask(
+    Map<String, dynamic> task,
+  ) async {
     final response = await http.post(
       Uri.parse('$_apiUrl/tareas'),
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        if (AuthService.token != null)
+          'Authorization': 'Bearer ${AuthService.token}',
+      },
       body: json.encode(task),
     );
     if (response.statusCode == 200) {
@@ -40,10 +61,17 @@ class ApiService {
   }
 
   // Actualizar una tarea
-  static Future<Map<String, dynamic>> updateTask(int id, Map<String, dynamic> task) async {
+  static Future<Map<String, dynamic>> updateTask(
+    int id,
+    Map<String, dynamic> task,
+  ) async {
     final response = await http.put(
       Uri.parse('$_apiUrl/tareas/$id'),
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        if (AuthService.token != null)
+          'Authorization': 'Bearer ${AuthService.token}',
+      },
       body: json.encode(task),
     );
     if (response.statusCode == 200) {
@@ -54,10 +82,17 @@ class ApiService {
   }
 
   // Marcar una tarea como completada
-  static Future<Map<String, dynamic>> toggleTaskCompletion(int id, bool completed) async {
+  static Future<Map<String, dynamic>> toggleTaskCompletion(
+    int id,
+    bool completed,
+  ) async {
     final response = await http.patch(
       Uri.parse('$_apiUrl/tareas/$id'),
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        if (AuthService.token != null)
+          'Authorization': 'Bearer ${AuthService.token}',
+      },
       body: json.encode({'completada': completed}),
     );
     if (response.statusCode == 200) {
@@ -69,7 +104,14 @@ class ApiService {
 
   // Eliminar una tarea
   static Future<void> deleteTask(int id) async {
-    final response = await http.delete(Uri.parse('$_apiUrl/tareas/$id'));
+    final response = await http.delete(
+      Uri.parse('$_apiUrl/tareas/$id'),
+      headers: {
+        'Content-Type': 'application/json',
+        if (AuthService.token != null)
+          'Authorization': 'Bearer ${AuthService.token}',
+      },
+    );
     if (response.statusCode != 204) {
       throw Exception('Error al eliminar la tarea');
     }
