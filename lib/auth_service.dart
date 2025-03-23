@@ -1,19 +1,12 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
   static final String _apiUrl = dotenv.get('API_URL');
   static String? _token;
 
   static String? get token => _token;
-
-  // 🔹 Inicializar desde SharedPreferences
-  static Future<void> init() async {
-    final prefs = await SharedPreferences.getInstance();
-    _token = prefs.getString('token');
-  }
 
   // 🔹 Método para iniciar sesión
   static Future<void> login(String username, String password) async {
@@ -29,9 +22,6 @@ class AuthService {
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       _token = data['token'];
-
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('token', _token!);
     } else {
       throw Exception('Error al iniciar sesión');
     }
@@ -51,9 +41,7 @@ class AuthService {
   }
 
   // 🔹 Método para cerrar sesión
-  static Future<void> logout() async {
+  static void logout() {
     _token = null;
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('token');
   }
 }
