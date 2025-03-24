@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ApiService {
   static final String _apiUrl = dotenv.get('API_URL');
 
-  // 🔐 Obtener headers con token desde SharedPreferences
+  // Obtener headers con token desde SharedPreferences
   static Future<Map<String, String>> _getAuthHeaders() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token') ?? '';
