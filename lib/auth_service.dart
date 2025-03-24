@@ -9,7 +9,7 @@ class AuthService {
   // Iniciar sesión
   static Future<void> login(String username, String password) async {
     final response = await http.post(
-      Uri.parse('$_apiUrl/login'),
+      Uri.parse('$_apiUrl/auth/login'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'username': username, 'password': password}),
     );
@@ -26,7 +26,7 @@ class AuthService {
   // Registro de usuario
   static Future<void> register(String username, String password) async {
     final response = await http.post(
-      Uri.parse('$_apiUrl/register'),
+      Uri.parse('$_apiUrl/auth/register'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'username': username, 'password': password}),
     );
