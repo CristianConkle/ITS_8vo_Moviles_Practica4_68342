@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'api_service.dart';
 import 'auth_service.dart';
 import 'login_view.dart';
+import 'register_view.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       home: const LoginView(),
+      //const RegisterView(),
       debugShowCheckedModeBanner: false,
     );
   }
